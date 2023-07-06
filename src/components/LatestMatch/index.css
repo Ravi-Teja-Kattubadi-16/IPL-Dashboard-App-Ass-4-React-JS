@@ -1,0 +1,71 @@
+/* Write your CSS here */
+.latest-matches-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #1e293b;
+  color: #ffffff;
+  border-radius: 15px;
+  padding-top: 40px;
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-bottom: 25px;
+}
+.team-details-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  width: 33%;
+  /* border: 2px solid white; */
+  /* padding-left: 40px; */
+}
+.team-name {
+  font-size: 35px;
+  /* border: 2px solid yellow; */
+  text-align: start;
+  margin: 0;
+}
+.date {
+  font-size: 30px;
+  font-weight: 400;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.description {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 400;
+}
+.logo-container {
+  width: 34%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  /* border: 2px solid yellow; */
+}
+.team-logo-alignment {
+  height: 200px;
+  width: 70%;
+}
+.innings-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 33%;
+  /* padding-right: 40px; */
+  /* border: 2px solid blue; */
+}
+.innings-heading {
+  font-size: 20px;
+  margin: 0;
+  font-weight: 400;
+}
+.team-description {
+  font-size: 15px;
+  font-weight: 400;
+}

@@ -1,0 +1,36 @@
+/* Write your CSS here */
+.team-matches-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid black;
+  background-color: #d91c1f;
+  min-height: 100vh;
+  font-family: 'Bree Serif';
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+.team-container {
+  width: 70%;
+}
+.team-banner {
+  height: 350px;
+  width: 100%;
+}
+.latest-matches-text {
+  color: #ffffff;
+  font-size: 18px;
+}
+.recent-matches-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 70%;
+  border: 2px solid black;
+  flex-wrap: wrap;
+  margin-left: 0;
+  margin-top: 20px;
+  padding-left: 0;
+}
