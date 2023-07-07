@@ -11,7 +11,7 @@ class TeamCard extends Component {
       <Link to={`/team-matches/${id}`} className="list-item-link-value">
         <li className="team-card-container">
           <img src={teamImageUrl} alt={name} className="team-logo" />
-          <h1 className="team-name-value"> {name} </h1>
+          <p className="team-name-value"> {name} </p>
         </li>
       </Link>
     )

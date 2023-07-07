@@ -1,146 +1,157 @@
 // Write your code here
+import Loader from 'react-loader-spinner'
 import './index.css'
 import {Component} from 'react'
 import LatestMatch from '../LatestMatch'
 import MatchCard from '../MatchCard'
 
 class TeamMatches extends Component {
-  state = {
-    recentMatches: {},
-    teamBannerUrl: '',
-    teamId: '',
+  constructor(props) {
+    super(props)
+    const {match} = this.props
+    const {params} = match
+    const {id} = params
+    let bgClassName
+    switch (id) {
+      case 'RCB':
+        bgClassName = 'rcb'
+        break
+      case 'KKR':
+        bgClassName = 'kkr'
+        break
+      case 'KXP':
+        bgClassName = 'k-xi-p'
+        break
+      case 'CSK':
+        bgClassName = 'csk'
+        break
+      case 'RR':
+        bgClassName = 'rr'
+        break
+      case 'MI':
+        bgClassName = 'mi'
+        break
+      case 'SH':
+        bgClassName = 'sh'
+        break
+      case 'DC':
+        bgClassName = 'dc'
+        break
+      default:
+        bgClassName = 'rcb'
+        break
+    }
+    this.state = {
+      formattedData: '',
+      latestMatch: {},
+      recentMatches: [],
+      teamBannerUrl: '',
+      isLoadingOrNot: true,
+      bgClassNameValue: bgClassName,
+    }
   }
 
   componentDidMount() {
     this.getTeamMatchesData()
+    console.log(this.props)
+  }
+
+  updatedLatestMatch = () => {
+    const {formattedData} = this.state
+    const latestMatchDetails = formattedData.latest_match_details
+
+    const updatedLatestMatchDetails = {
+      id: latestMatchDetails.id,
+      competingTeam: latestMatchDetails.competing_team,
+      competingTeamLogo: latestMatchDetails.competing_team_logo,
+      date: latestMatchDetails.date,
+      firstInnings: latestMatchDetails.first_innings,
+      manOfTheMatch: latestMatchDetails.man_of_the_match,
+      matchStatus: latestMatchDetails.match_status,
+      result: latestMatchDetails.result,
+      secondInnings: latestMatchDetails.second_innings,
+      umpires: latestMatchDetails.umpires,
+      venue: latestMatchDetails.venue,
+    }
+    this.setState({latestMatch: updatedLatestMatchDetails})
+  }
+
+  updatedRecentMatches = () => {
+    const {formattedData} = this.state
+    const recentMatchesData = formattedData.recent_matches.map(eachMatch => ({
+      competingTeam: eachMatch.competing_team,
+      competingTeamLogo: eachMatch.competing_team_logo,
+      data: eachMatch.data,
+      firstInnings: eachMatch.first_innings,
+      id: eachMatch.id,
+      manOfTheMatch: eachMatch.man_of_the_match,
+      matchStatus: eachMatch.match_status,
+      secondInnings: eachMatch.second_innings,
+      result: eachMatch.result,
+      umpires: eachMatch.umpires,
+      venue: eachMatch.venue,
+    }))
+    this.setState({recentMatches: recentMatchesData, isLoadingOrNot: false})
   }
 
   getTeamMatchesData = async () => {
     const {match} = this.props
     const {params} = match
     const {id} = params
-    this.setState({teamId: id})
-    console.log(`ipl id-> ${id}`)
-    const url = `https://apis.ccbp.in/ipl/${id}`
-    console.log(`url->${url}`)
-    const apiResponse = await fetch(url)
-    // console.log(`values ${await apiResponse.json()}`)
+    const teamMatchesApiUrl = `https://apis.ccbp.in/ipl/${id}`
+    const apiResponse = await fetch(teamMatchesApiUrl)
     const apiData = await apiResponse.json()
-    console.log(`api-result-> ${apiData}`)
+    // console.log(apiData)
+    const teamBannerLink = apiData.team_banner_url
+    this.setState({
+      formattedData: apiData,
+      teamBannerUrl: teamBannerLink,
+    })
+    this.updatedRecentMatches()
+    this.updatedLatestMatch()
+  }
 
-    // fetch(url, {
-    //   method: 'GET',
-    //   headers: {
-    //     Accept: 'application/json',
-    //   },
-    // })
-    //   .then(response => response.json())
-    //   .then(response => console.log(response))
+  renderLoader = () => (
+    <div className="loader-class">
+      <Loader type="Oval" color="#ffffff" height={50} />
+    </div>
+  )
 
-    // console.log(response)
-    // const updatedRecentMatches = data.recent_matches.map(eachMatch => ({
-    //   competingTeam: eachMatch.competing_team,
-    //   competingTeamLogo: eachMatch.competing_team_logo,
-    //   data: eachMatch.data,
-    //   firstInnings: eachMatch.first_innings,
-    //   id: eachMatch.id,
-    //   manOfTheMatch: eachMatch.man_of_the_match,
-    //   matchStatus: eachMatch.match_status,
-    //   secondInnings: eachMatch.second_innings,
-    //   result: eachMatch.result,
-    //   umpires: eachMatch.umpires,
-    //   venue: eachMatch.venue,
-    // }))
-    // const teamBannerUrl = data.team_banner_url
-    // console.log(teamBannerUrl)
-    // console.log(`updated-> ${updatedRecentMatches}`)
+  renderTeamMatches = () => {
+    const {recentMatches, teamBannerUrl, latestMatch} = this.state
 
-    // console.log(updatedLatestMatchDetails)
-    // this.setState({
-    //   recentMatches: updatedRecentMatches,
-    //   teamBannerUrl,
-    // })
-    // const {
-    //   latestMatchDetails,
-    //   recentMatches,
-    //   teamBannerUrl,
-    // } = updatedTeamMatchesData
+    return (
+      <div className="matches-container">
+        <div className="team-container">
+          <img src={teamBannerUrl} alt="team banner" className="team-banner" />
+          <p className="latest-matches-text"> Latest Matches </p>
 
-    // const recentMatches = updatedTeamMatchesData.recentMatches
-    // const updatedLatestMatchDetails = {
-    //   id: latestMatchDetails.id,
-    //   competingTeam: latestMatchDetails.competing_team,
-    //   competingTeamLogo: latestMatchDetails.competing_team_logo,
-    //   date: latestMatchDetails.date,
-    //   firstInnings: latestMatchDetails.first_innings,
-    //   manOfTheMatch: latestMatchDetails.man_of_the_match,
-    //   matchStatus: latestMatchDetails.match_status,
-    //   result: latestMatchDetails.result,
-    //   secondInnings: latestMatchDetails.second_innings,
-    //   umpires: latestMatchDetails.umpires,
-    //   venue: latestMatchDetails.venue,
-    // }
-    // console.log(lateshMatchDetails)
+          {/* <LatestMatch key={latestMatch.id} latestMatch={latestMatch} /> */}
+        </div>
+
+        <div className="recent-matches-container">
+          <div className="latest-container">
+            <LatestMatch key={latestMatch.id} latestMatch={latestMatch} />
+          </div>
+          <ul className="match-boxes-container">
+            {recentMatches.map(eachMatch => (
+              <MatchCard eachMatch={eachMatch} key={eachMatch.id} />
+            ))}
+          </ul>
+        </div>
+      </div>
+    )
   }
 
   render() {
-    const {recentMatches, teamBannerUrl, teamId} = this.state
-    // console.log(latestMatchDetails)
-    // console.log(`recentmatches-> ${recentMatches}`)
+    const {isLoadingOrNot, bgClassNameValue} = this.state
 
     return (
-      <div className="team-matches-container">
-        <div className="team-container">
-          <img src={teamBannerUrl} alt="" className="team-banner" />
-          <p className="latest-matches-text"> Latest Matches </p>
-
-          <LatestMatch key={teamId} teamId={teamId} />
-        </div>
-
-        <ul className="recent-matches-container">
-          {/* {recentMatches.map(eachMatch => (
-            <MatchCard key={eachMatch.id} eachMatch={eachMatch} />
-          ))} */}
-
-          {/* <MatchCard eachMatch={recentMatches[0]} /> */}
-        </ul>
+      <div className={`team-matches-container ${bgClassNameValue}`}>
+        {isLoadingOrNot ? this.renderLoader() : this.renderTeamMatches()}
       </div>
     )
   }
 }
 
 export default TeamMatches
-// {
-//   "team_banner_url": "https://assets.ccbp.in/frontend/react-js/kkr-team-img.png",
-//   "latest_match_details": {
-//     "umpires": "CB Gaffaney, VK Sharma",
-//     "result": "Kolkata Knight Riders Won by 7 wickets",
-//     "man_of_the_match": "Shubman Gill",
-//     "id": "1216545",
-//     "date": "2020-09-26",
-//     "venue": "At Sheikh Zayed Stadium, Abu Dhabi",
-//     "competing_team": "Sunrisers Hyderabad",
-//     "competing_team_logo": "https://upload.wikimedia.org/wikipedia/en/thumb/8/81/Sunrisers_Hyderabad.svg/1200px-Sunrisers_Hyderabad.svg.png",
-//     // use value of the key 'competing_team' for alt as `latest match ${competing_team}`
-//     "first_innings": "Sunrisers Hyderabad",
-//     "second_innings": "Kolkata Knight Riders",
-//     "match_status": "Won",
-//   },
-//   "recent_matches": [
-//     {
-//       "umpires": "RK Illingworth, K Srinivasan",
-//       "result": "Royal Challengers Bangalore Won by 82 runs",
-//       "man_of_the_match": "AB de Villiers",
-//       "id": "1216540",
-//       "date": "2020-10-12",
-//       "venue": "At Sharjah Cricket Stadium, Sharjah",
-//       "competing_team": "Royal Challengers Bangalore",
-//       "competing_team_logo": "https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Royal_Challengers_Bangalore_2020.svg/1200px-Royal_Challengers_Bangalore_2020.svg.png",
-//       // use value of the key 'competing_team' for alt as `competing team ${competing_team}`
-//       "first_innings": "Royal Challengers Bangalore",
-//       "second_innings": "Kolkata Knight Riders",
-//       "match_status": "Lost",
-//     },
-//     ...
-//   ],
-// }
